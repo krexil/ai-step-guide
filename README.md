@@ -2,6 +2,8 @@
 
 A hands-free step reader for use with AI assistants. Displays one step at a time in a large overlay window, speaks it aloud, and listens for your voice to advance — so your eyes and hands stay on the task.
 
+[![Watch the demo](https://img.youtube.com/vi/YhsqzSlX_tY/maxresdefault.jpg)](https://www.youtube.com/watch?v=YhsqzSlX_tY)
+
 ---
 
 ## Getting Started
