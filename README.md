@@ -12,12 +12,15 @@ Tell your AI assistant:
 
 > "Please look at https://github.com/krexil/ai-step-guide and set this up for me."
 
-This works with any AI assistant that can run commands on your computer, including:
+What happens depends on which assistant you use:
 
+**Runs everything for you** — these agents run locally on your machine and handle the full setup without any extra steps:
 - [Claude Code](https://claude.ai/code)
-- [Claude Co-work](https://www.anthropic.com/product/claude-cowork)
 - [Cursor](https://cursor.com)
 - [Windsurf](https://windsurf.com)
+
+**Gives you a script to run** — these agents run in a cloud sandbox and can't install software on your machine directly. They will prepare a setup script and tell you to run it. On macOS run `setup.sh`, on Windows run `setup.bat`:
+- [Claude Co-work](https://www.anthropic.com/product/claude-cowork)
 
 ---
 
