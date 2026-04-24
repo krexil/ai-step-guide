@@ -1,5 +1,17 @@
 # AI Step Guide
 
+A hands-free step reader for use with AI assistants. Displays one step at a time in a large overlay window, speaks it aloud, and listens for your voice to advance — so your eyes and hands stay on the task.
+
+---
+
+## Getting Started
+
+Tell your AI assistant:
+
+> "Please look at https://github.com/krexil/ai-step-guide and set this up for me."
+
+That's it. Your AI will read this page and handle everything.
+
 ---
 
 ## For Humans
@@ -42,14 +54,6 @@ AI Step Guide displays one step at a time in a large overlay window, speaks it a
 - Python 3.8+
 - Windows or macOS
 - Microphone and speakers
-
-### Getting Started
-
-You don't need to install anything yourself. Share this page with your AI assistant and say:
-
-> "Please set this up for me."
-
-Your AI will read the instructions below and handle the entire installation and configuration.
 
 ---
 
