@@ -1,0 +1,4 @@
+vosk-model-small-en-us/
+__pycache__/
+*.pyc
+*.mp3
