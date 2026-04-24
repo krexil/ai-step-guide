@@ -16,7 +16,6 @@ This works with any AI assistant that can run commands on your computer, includi
 - [Claude Co-work](https://www.anthropic.com/product/claude-cowork)
 - [Cursor](https://cursor.com)
 - [Windsurf](https://windsurf.com)
-- [Perplexity](https://www.perplexity.ai) (with computer use enabled)
 
 ---
 
