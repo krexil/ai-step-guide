@@ -40,7 +40,7 @@ AI Step Guide displays one step at a time in a large overlay window, speaks it a
 ### Requirements
 
 - Python 3.8+
-- Windows (tested on Windows 11)
+- Windows or macOS
 - Microphone and speakers
 
 ### Getting Started
@@ -63,10 +63,18 @@ The user has asked you to set up AI Step Guide on their computer. Follow these s
 pip install edge-tts pygame pyaudio vosk
 ```
 
-If `pyaudio` fails on Windows:
+If `pyaudio` fails on **Windows**:
 ```bash
 pip install pipwin && pipwin install pyaudio
 ```
+
+If `pyaudio` fails on **macOS**:
+```bash
+brew install portaudio
+pip install pyaudio
+```
+
+On macOS, also grant microphone access when prompted, or go to System Settings > Privacy & Security > Microphone and enable it for Terminal.
 
 ### 2. Clone the repo
 
