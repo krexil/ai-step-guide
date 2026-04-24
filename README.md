@@ -10,10 +10,13 @@ Tell your AI assistant:
 
 > "Please look at https://github.com/krexil/ai-step-guide and set this up for me."
 
-What happens next depends on which AI you're using:
+This works with any AI assistant that can run commands on your computer, including:
 
-- **Agentic coding assistants** (Claude Code, Cursor, Windsurf) — can run commands directly on your computer and will handle the entire setup automatically.
-- **Chat assistants** (ChatGPT, Claude.ai, Gemini, Perplexity) — cannot run commands, but will read this page and walk you through each step. You'll run the commands yourself as directed.
+- [Claude Code](https://claude.ai/code)
+- [Claude Co-work](https://www.anthropic.com/product/claude-cowork)
+- [Cursor](https://cursor.com)
+- [Windsurf](https://windsurf.com)
+- [Perplexity](https://www.perplexity.ai) (with computer use enabled)
 
 ---
 
