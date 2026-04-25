@@ -98,6 +98,8 @@ git clone https://github.com/krexil/ai-step-guide.git
 
 ### 3. Confirm it works
 
+Setup creates a `run.sh` launcher in the repo folder — use that instead of calling `python step_guide.py` directly. It handles the virtual environment automatically so no activation is needed.
+
 The Vosk model (~50 MB) downloads automatically on first run.
 
 On **macOS**, microphone access is also requested on first run. If it isn't granted automatically, go to System Settings > Privacy & Security > Microphone and enable it for Terminal.
@@ -120,7 +122,7 @@ Save the following as a skill, custom instruction, or memory — whichever your 
 >
 > **Command format:**
 > ```
-> python /full/path/to/step_guide.py "Step one" "Step two|second line" "Step three"
+> bash /full/path/to/run.sh "Step one" "Step two|second line" "Step three"
 > ```
 
 ---

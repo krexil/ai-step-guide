@@ -1,26 +1,38 @@
 #!/bin/bash
 echo "Setting up AI Step Guide..."
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
 if [[ "$OSTYPE" == "darwin"* ]]; then
     if ! command -v brew &> /dev/null; then
         echo "Installing Homebrew..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
-    # Homebrew may not be on PATH yet in this session — set it explicitly
-    # /opt/homebrew/bin is Apple Silicon; /usr/local/bin is Intel
     export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
     brew install portaudio python
 fi
 
-python3 -m pip install edge-tts pygame pyaudio vosk
+echo "Creating virtual environment..."
+python3 -m venv "$SCRIPT_DIR/.venv"
 
-echo ""
-if python3 -c "import edge_tts, pygame, pyaudio, vosk" 2>/dev/null; then
+echo "Installing packages..."
+"$SCRIPT_DIR/.venv/bin/python" -m pip install --quiet edge-tts pygame pyaudio vosk
+
+if "$SCRIPT_DIR/.venv/bin/python" -c "import edge_tts, pygame, pyaudio, vosk" 2>/dev/null; then
     echo "All packages installed successfully."
-    echo ""
-    echo "Test with:"
-    echo "  python3 step_guide.py \"This is step one\" \"This is step two\""
 else
     echo "ERROR: One or more packages failed to install. Check the output above."
     exit 1
 fi
+
+# Create launcher script so users never need to activate the venv manually
+cat > "$SCRIPT_DIR/run.sh" << 'EOF'
+#!/bin/bash
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+"$SCRIPT_DIR/.venv/bin/python" "$SCRIPT_DIR/step_guide.py" "$@"
+EOF
+chmod +x "$SCRIPT_DIR/run.sh"
+
+echo ""
+echo "Setup complete. Run steps with:"
+echo "  bash $SCRIPT_DIR/run.sh \"Step one\" \"Step two\""

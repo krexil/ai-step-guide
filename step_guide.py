@@ -142,6 +142,7 @@ class StepGuide:
     def _show_step(self):
         self.counter_var.set(f'Step {self.current + 1} of {len(self.steps)}')
         self.step_var.set(self.steps[self.current])
+        self.root.update()
         idx = self.current
         threading.Thread(target=self._play, args=(idx,), daemon=True).start()
         if idx + 1 < len(self.steps):
