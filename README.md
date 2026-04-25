@@ -53,9 +53,9 @@ AI Step Guide displays one step at a time in a large overlay window, speaks it a
 
 Once setup is complete, ask your AI assistant:
 
-> "Walk me through a test of the AI Step Guide by giving me a test procedure."
+> "Walk me through a test of the AI Step Guide by giving me a test procedure: Test step 1; Test step 2; etc."
 
-After you hear the first step say "next."
+After you hear "Test step 1" say "next".
 
 ### Requirements
 
@@ -96,20 +96,7 @@ Ask the user where they'd like to keep it with a suggestion, then clone:
 git clone https://github.com/krexil/ai-step-guide.git
 ```
 
-### 3. Confirm it works
-
-Run a test procedure that exercises all main features — TTS, voice advancement, repeat, back navigation, and exit. The Vosk model (~50 MB) downloads automatically on first run.
-
-```bash
-python3 step_guide.py \
-  "You should hear this read aloud." \
-  "Say 'next' to advance." \
-  "Say 'repeat' to rehear this, then 'next'." \
-  "Say 'back' to return, then 'next'." \
-  "All confirmed. Say 'done' to exit."
-```
-
-### 4. Save a skill or custom instruction
+### 3. Save a skill or custom instruction
 
 Save the following as a skill, custom instruction, or memory — whichever your platform supports — so you use this tool automatically in future conversations:
 
