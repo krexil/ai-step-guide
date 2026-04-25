@@ -1,6 +1,6 @@
 # AI Step Guide
 
-A hands-free step reader for use with AI assistants. Displays one step at a time in a large overlay window, speaks it aloud, and listens for your voice to advance — so your eyes and hands stay on the task.
+When an AI assistant walks you through a multi-step process in another program, you end up constantly switching focus: read a step in the chat window, switch to the app, do the step, switch back to find the next one. It breaks your flow and slows you down. AI Step Guide speaks the step aloud and listens for your voice command to advance. Your eyes and hands stay on the task.
 
 [![Watch the demo](https://img.youtube.com/vi/V-ZUH2iht6A/maxresdefault.jpg)](https://youtu.be/V-ZUH2iht6A)
 
@@ -17,8 +17,8 @@ These agents run locally on your machine and handle the full setup without any e
 - [Cursor](https://cursor.com)
 - [Windsurf](https://windsurf.com)
 
-These agents will prepare the setup script and tell you what to run — but you'll likely need to open Terminal and paste one command yourself - on macOS run `setup.sh`, on Windows run `setup.bat`:
-- [Claude Co-work](https://www.anthropic.com/product/claude-cowork)
+With this agent you'll likely be asked to open Terminal and paste one command yourself:
+- [Claude Cowork](https://www.anthropic.com/product/claude-cowork)
 
 ---
 
