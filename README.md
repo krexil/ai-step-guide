@@ -71,6 +71,8 @@ The user has asked you to set up AI Step Guide on their computer. Follow these s
 
 ### 1. Install dependencies
 
+**Prerequisite:** Python 3.8+ must be installed. If not: Windows — download from [python.org](https://www.python.org/downloads/); macOS — `brew install python` or download from python.org.
+
 ```bash
 python3 -m pip install edge-tts pygame pyaudio vosk
 ```
@@ -86,8 +88,6 @@ If `pyaudio` fails on **macOS**:
 python3 -m pip install pyaudio
 ```
 
-On macOS, also grant microphone access when prompted, or go to System Settings > Privacy & Security > Microphone and enable it for Terminal.
-
 ### 2. Clone the repo
 
 Ask the user where they'd like to keep it with a suggestion, then clone:
@@ -96,7 +96,22 @@ Ask the user where they'd like to keep it with a suggestion, then clone:
 git clone https://github.com/krexil/ai-step-guide.git
 ```
 
-### 3. Save a skill or custom instruction
+### 3. Confirm it works
+
+Run a test procedure that exercises all main features — TTS, voice advancement, repeat, back navigation, and exit. The Vosk model (~50 MB) downloads automatically on first run.
+
+On **macOS**, microphone access is also requested on first run. If it isn't granted automatically, go to System Settings > Privacy & Security > Microphone and enable it for Terminal.
+
+```bash
+python3 step_guide.py \
+  "You should hear this read aloud." \
+  "Say 'next' to advance." \
+  "Say 'repeat' to rehear this, then 'next'." \
+  "Say 'back' to return, then 'next'." \
+  "All confirmed. Say 'done' to exit."
+```
+
+### 4. Save a skill or custom instruction
 
 Save the following as a skill, custom instruction, or memory — whichever your platform supports — so you use this tool automatically in future conversations:
 
