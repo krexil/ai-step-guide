@@ -22,6 +22,11 @@ What happens depends on which assistant you use:
 **Gives you a script to run** — these agents run in a cloud sandbox and can't install software on your machine directly. They'll prepare the setup script and tell you what to run — but you'll need to open Terminal and paste one command yourself. If Computer Use is enabled in your assistant settings, it can open Terminal and do that step for you too. On macOS run `setup.sh`, on Windows run `setup.bat`:
 - [Claude Co-work](https://www.anthropic.com/product/claude-cowork)
 
+### Testing It
+
+Once setup is complete, ask your AI assistant: "Let's test by making up a procedure and giving it to me though AI Step Guide."
+When you hear the first step say "Next" into your mic. 
+
 ---
 
 ## For Humans
@@ -58,22 +63,6 @@ AI Step Guide displays one step at a time in a large overlay window, speaks it a
 | "repeat" / "again" | R | Replay the current step |
 | "back" / "previous" | B | Go back one step |
 | "done" / "quit" / "stop" | Q | Close |
-
-### Testing It
-
-Once setup is complete, ask your AI assistant:
-
-> "Walk me through a test of the AI Step Guide."
-
-The assistant will generate a short procedure that exercises TTS, voice advancement, repeat, back navigation, and exit — so you can confirm everything is working. Here's what that looks like:
-
-```bash
-python step_guide.py \
-  "The app is running.|Listen — this step should|be read aloud." \
-  "Say 'repeat' to hear this again.|Say 'next' when ready." \
-  "Say 'back' to return to step 2.|Say 'next' to come back here." \
-  "All features confirmed.|Say 'done' to exit."
-```
 
 ### Requirements
 
