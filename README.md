@@ -12,14 +12,12 @@ Tell your AI assistant:
 
 > "Please look at https://github.com/krexil/ai-step-guide and set this up for me."
 
-What happens depends on which assistant you use:
-
-**Runs everything for you** — these agents run locally on your machine and handle the full setup without any extra steps:
+These agents run locally on your machine and handle the full setup without any extra steps:
 - [Claude Code](https://claude.ai/code)
 - [Cursor](https://cursor.com)
 - [Windsurf](https://windsurf.com)
 
-**Gives you a script to run** — these agents run in a cloud sandbox and can't install software on your machine directly. They'll prepare the setup script and tell you what to run — but you'll need to open Terminal and paste one command yourself. If Computer Use is enabled in your assistant settings, it can open Terminal and do that step for you too. On macOS run `setup.sh`, on Windows run `setup.bat`:
+These agents will prepare the setup script and tell you what to run — but you'll likely need to open Terminal and paste one command yourself - on macOS run `setup.sh`, on Windows run `setup.bat`:
 - [Claude Co-work](https://www.anthropic.com/product/claude-cowork)
 
 ---
@@ -42,14 +40,6 @@ AI Step Guide displays one step at a time in a large overlay window, speaks it a
 4. The step is spoken aloud
 5. Say **"next"** when done — no need to look away from your work
 
-### Features
-
-- **Offline voice recognition** via [Vosk](https://alphacephei.com/vosk/) — fast, no API key, works without internet
-- **Neural text-to-speech** via Microsoft Edge TTS — natural-sounding voice, no API key
-- **Pre-fetches audio** for the next step in the background so advancing is instant
-- **Always-on-top window** floats above your work
-- **Keyboard fallback** for when you prefer not to use your voice
-
 ### Voice Commands
 
 | Say | Or press | Action |
@@ -63,17 +53,9 @@ AI Step Guide displays one step at a time in a large overlay window, speaks it a
 
 Once setup is complete, ask your AI assistant:
 
-> "Walk me through a test of the AI Step Guide."
+> "Walk me through a test of the AI Step Guide by giving me a test procedure."
 
-The assistant will generate a short procedure that exercises TTS, voice advancement, repeat, back navigation, and exit — so you can confirm everything is working. Here's what that looks like:
-
-```bash
-python3 step_guide.py \
-  "The app is running.|Listen — this step should|be read aloud." \
-  "Say 'repeat' to hear this again.|Say 'next' when ready." \
-  "Say 'back' to return to step 2.|Say 'next' to come back here." \
-  "All features confirmed.|Say 'done' to exit."
-```
+After you hear the first step say "Next".   
 
 ### Requirements
 
@@ -108,7 +90,7 @@ On macOS, also grant microphone access when prompted, or go to System Settings >
 
 ### 2. Clone the repo
 
-Ask the user where they'd like to keep it, then clone:
+Ask the user where they'd like to keep it with a suggestion, then clone:
 
 ```bash
 git clone https://github.com/krexil/ai-step-guide.git
