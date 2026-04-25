@@ -98,18 +98,9 @@ git clone https://github.com/krexil/ai-step-guide.git
 
 ### 3. Confirm it works
 
-Run a test procedure that exercises all main features — TTS, voice advancement, repeat, back navigation, and exit. The Vosk model (~50 MB) downloads automatically on first run.
+The Vosk model (~50 MB) downloads automatically on first run.
 
 On **macOS**, microphone access is also requested on first run. If it isn't granted automatically, go to System Settings > Privacy & Security > Microphone and enable it for Terminal.
-
-```bash
-python3 step_guide.py \
-  "You should hear this read aloud." \
-  "Say 'next' to advance." \
-  "Say 'repeat' to rehear this, then 'next'." \
-  "Say 'back' to return, then 'next'." \
-  "All confirmed. Say 'done' to exit."
-```
 
 ### 4. Save a skill or custom instruction
 
