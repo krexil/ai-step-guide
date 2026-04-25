@@ -2,12 +2,11 @@
 echo "Setting up AI Step Guide..."
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    if command -v brew &> /dev/null; then
-        brew install portaudio
-    else
-        echo "Homebrew not found. Install it from https://brew.sh then re-run this script."
-        exit 1
+    if ! command -v brew &> /dev/null; then
+        echo "Installing Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
+    brew install portaudio
 fi
 
 pip install edge-tts pygame pyaudio vosk
