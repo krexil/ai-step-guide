@@ -9,11 +9,17 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
     export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
-    brew install portaudio python
+    brew install portaudio python python-tk
 fi
 
 echo "Creating virtual environment..."
-python3 -m venv "$SCRIPT_DIR/.venv"
+if [[ "$OSTYPE" == "darwin"* ]] && command -v /opt/homebrew/bin/python3 &> /dev/null; then
+    /opt/homebrew/bin/python3 -m venv "$SCRIPT_DIR/.venv"
+elif [[ "$OSTYPE" == "darwin"* ]] && command -v /usr/local/bin/python3 &> /dev/null; then
+    /usr/local/bin/python3 -m venv "$SCRIPT_DIR/.venv"
+else
+    python3 -m venv "$SCRIPT_DIR/.venv"
+fi
 
 echo "Installing packages..."
 "$SCRIPT_DIR/.venv/bin/python" -m pip install --quiet edge-tts pygame pyaudio vosk
