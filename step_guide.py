@@ -31,6 +31,9 @@ def _check_imports():
         sys.exit(1)
 
 
+VOICE = 'en-US-GuyNeural'
+MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'vosk-model-small-en-us')
+GRAMMAR = json.dumps(['next', 'repeat', 'again', 'back', 'previous', 'done', 'quit', 'stop', '[unk]'])
 MODEL_URL = 'https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip'
 
 
@@ -58,10 +61,6 @@ import vosk
 import edge_tts
 
 vosk.SetLogLevel(-1)
-
-VOICE = 'en-US-GuyNeural'
-MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'vosk-model-small-en-us')
-GRAMMAR = json.dumps(['next', 'repeat', 'again', 'back', 'previous', 'done', 'quit', 'stop', '[unk]'])
 
 
 def _run_async(coro):
