@@ -15,12 +15,6 @@ import urllib.request
 import zipfile
 
 
-VOICE = 'en-US-GuyNeural'
-MODEL_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'vosk-model-small-en-us')
-MODEL_URL = 'https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip'
-GRAMMAR = json.dumps(['next', 'repeat', 'again', 'back', 'previous', 'done', 'quit', 'stop', '[unk]'])
-
-
 def _check_imports():
     missing = []
     for pkg, mod in [('edge-tts', 'edge_tts'), ('pygame', 'pygame'),
@@ -37,17 +31,20 @@ def _check_imports():
         sys.exit(1)
 
 
+MODEL_URL = 'https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip'
+
+
 def _ensure_model():
-    if os.path.exists(MODEL_DIR):
+    if os.path.exists(MODEL_PATH):
         return
     print("Downloading voice recognition model (~50 MB, one-time)...")
-    zip_path = MODEL_DIR + '.zip'
+    zip_path = MODEL_PATH + '.zip'
     urllib.request.urlretrieve(MODEL_URL, zip_path)
     print("Extracting...")
     with zipfile.ZipFile(zip_path, 'r') as z:
-        z.extractall(os.path.dirname(MODEL_DIR))
-    extracted = os.path.join(os.path.dirname(MODEL_DIR), 'vosk-model-small-en-us-0.15')
-    os.rename(extracted, MODEL_DIR)
+        z.extractall(os.path.dirname(MODEL_PATH))
+    extracted = os.path.join(os.path.dirname(MODEL_PATH), 'vosk-model-small-en-us-0.15')
+    os.rename(extracted, MODEL_PATH)
     os.unlink(zip_path)
     print("Model ready.\n")
 
@@ -62,14 +59,30 @@ import edge_tts
 
 vosk.SetLogLevel(-1)
 
+VOICE = 'en-US-GuyNeural'
+MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'vosk-model-small-en-us')
+GRAMMAR = json.dumps(['next', 'repeat', 'again', 'back', 'previous', 'done', 'quit', 'stop', '[unk]'])
+
+
+def _run_async(coro):
+    """Run a coroutine safely from any thread on Windows."""
+    loop = asyncio.new_event_loop()
+    try:
+        loop.run_until_complete(coro)
+    finally:
+        loop.close()
+
 
 class StepGuide:
     def __init__(self, steps):
         self.steps = steps
         self.current = 0
         self.listening = True
+        self._speaking = False
         self._audio_cache = {}
         self._cache_lock = threading.Lock()
+        self._fetch_locks = {}
+        self._fetch_locks_lock = threading.Lock()
 
         pygame.mixer.init()
 
@@ -77,27 +90,27 @@ class StepGuide:
         self.root.title("Step Guide")
         self.root.configure(bg='black')
         self.root.attributes('-topmost', True)
-        self.root.geometry('1000x420')
+        self.root.geometry('500x210')
         self.root.resizable(True, True)
 
         self.counter_var = tk.StringVar()
         tk.Label(
             self.root, textvariable=self.counter_var,
-            font=('Arial', 22), fg='#777777', bg='black'
-        ).pack(pady=(24, 0))
+            font=('Arial', 11), fg='#777777', bg='black'
+        ).pack(pady=(12, 0))
 
         self.step_var = tk.StringVar()
         tk.Label(
             self.root, textvariable=self.step_var,
-            font=('Arial', 54, 'bold'), fg='white', bg='black',
-            wraplength=940, justify='center'
-        ).pack(expand=True, padx=30)
+            font=('Arial', 27, 'bold'), fg='white', bg='black',
+            wraplength=470, justify='center'
+        ).pack(expand=True, padx=15)
 
         tk.Label(
             self.root,
-            text='Say or press:  NEXT (Space/Enter)  ·  REPEAT (R)  ·  BACK (B)  ·  DONE (Q)',
-            font=('Arial', 13), fg='#444444', bg='black'
-        ).pack(pady=(0, 22))
+            text='NEXT (Space)  ·  REPEAT (R)  ·  BACK (B)  ·  DONE (Q)',
+            font=('Arial', 10), fg='#444444', bg='black'
+        ).pack(pady=(0, 11))
 
         self.root.bind('<space>', lambda e: self.cmd_next())
         self.root.bind('<Return>', lambda e: self.cmd_next())
@@ -117,32 +130,52 @@ class StepGuide:
         with self._cache_lock:
             if index in self._audio_cache:
                 return self._audio_cache[index]
-        text = self.steps[index].replace('\n', ' ')
-        tmp = tempfile.NamedTemporaryFile(suffix='.mp3', delete=False)
-        tmp.close()
-        asyncio.run(edge_tts.Communicate(text, VOICE).save(tmp.name))
-        with self._cache_lock:
-            self._audio_cache[index] = tmp.name
-        return tmp.name
+
+        # Per-index lock so two threads don't both fetch the same step
+        with self._fetch_locks_lock:
+            if index not in self._fetch_locks:
+                self._fetch_locks[index] = threading.Lock()
+            lock = self._fetch_locks[index]
+
+        with lock:
+            with self._cache_lock:
+                if index in self._audio_cache:
+                    return self._audio_cache[index]
+            try:
+                text = self.steps[index].replace('\n', ' ')
+                tmp = tempfile.NamedTemporaryFile(suffix='.mp3', delete=False)
+                tmp.close()
+                _run_async(edge_tts.Communicate(text, VOICE).save(tmp.name))
+                with self._cache_lock:
+                    self._audio_cache[index] = tmp.name
+                return tmp.name
+            except Exception as e:
+                print(f"TTS fetch error (step {index + 1}): {e}", flush=True)
+                return None
 
     def _play(self, index):
         try:
             path = self._fetch_audio(index)
+            if not path:
+                return
+            self._speaking = True
             pygame.mixer.music.load(path)
             pygame.mixer.music.play()
             clock = pygame.time.Clock()
             while pygame.mixer.music.get_busy():
                 if not self.listening:
                     pygame.mixer.music.stop()
+                    self._speaking = False
                     return
                 clock.tick(10)
         except Exception as e:
             print(f"Audio error: {e}", flush=True)
+        finally:
+            self._speaking = False
 
     def _show_step(self):
         self.counter_var.set(f'Step {self.current + 1} of {len(self.steps)}')
         self.step_var.set(self.steps[self.current])
-        self.root.update()
         idx = self.current
         threading.Thread(target=self._play, args=(idx,), daemon=True).start()
         if idx + 1 < len(self.steps):
@@ -172,18 +205,20 @@ class StepGuide:
         self.root.destroy()
 
     def _dispatch(self, text):
-        if 'next' in text:
+        if self._speaking:
+            return
+        if any(w in text for w in ('next',)):
             self.root.after(0, self.cmd_next)
-        elif 'repeat' in text or 'again' in text:
+        elif any(w in text for w in ('repeat', 'again')):
             self.root.after(0, self.cmd_repeat)
-        elif 'back' in text or 'previous' in text:
+        elif any(w in text for w in ('back', 'previous')):
             self.root.after(0, self.cmd_back)
-        elif 'done' in text or 'quit' in text or 'stop' in text:
+        elif any(w in text for w in ('done', 'quit', 'stop')):
             self.root.after(0, self.cmd_done)
 
     def _voice_loop(self):
         try:
-            model = vosk.Model(MODEL_DIR)
+            model = vosk.Model(MODEL_PATH)
             rec = vosk.KaldiRecognizer(model, 16000, GRAMMAR)
             p = pyaudio.PyAudio()
             stream = p.open(format=pyaudio.paInt16, channels=1, rate=16000,
