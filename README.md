@@ -110,17 +110,20 @@ Save the following as a skill, custom instruction, or memory — whichever your 
 
 ---
 
-> Whenever you give me step-by-step instructions for navigating an external program or application — whether I explicitly ask to be walked through something or you're just answering a how-to question — use **AI Step Guide** (`step_guide.py`) instead of listing steps in the chat.
+> TRIGGER when: giving the user step-by-step UI navigation instructions in an external program invoke the step guide instead of listing steps as plain text. This applies whether or not the user explicitly asks to be "walked through" something; any how-to answer that results in numbered or sequential UI steps should use this tool. The tool speaks each step aloud and shows it in a large font. The user advances with voice or keyboard.
 >
-> **Formatting rules:**
-> - One action per step — never combine two actions with "and"
-> - Aim for 1 to 5 words per step
-> - Imperative phrasing: "Click Save" not "You should click Save"
+> **Invocation:** Pass all steps as a single string, with steps separated by ` | `, aim for 1 to 5 words per step.
 >
-> **Command format:**
 > ```
-> bash /full/path/to/run.sh "Step one | Step two | Step three"
+> bash /full/path/to/run.sh "WordPress Admin | Appearance | Menus | Click Create a new menu | Enter a name | Click Create Menu"
 > ```
+>
+> | Voice | Keyboard | Action |
+> |-------|----------|--------|
+> | "next" / "continue" | Space or Enter | Advance |
+> | "repeat" / "again" | R | Replay step |
+> | "back" / "previous" | B | Go back one step |
+> | "done" / "quit" / "stop" | Q | Close |
 
 ---
 
