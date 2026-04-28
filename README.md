@@ -114,7 +114,7 @@ Save the following as a skill, custom instruction, or memory — whichever your 
 >
 > **Formatting rules:**
 > - One action per step — never combine two actions with "and"
-> - Aim for ~5 words per step; shorter is better
+> - Aim for 1 to 5 words per step
 > - Imperative phrasing: "Click Save" not "You should click Save"
 >
 > **Command format:**
