@@ -110,7 +110,7 @@ Save the following as a skill, custom instruction, or memory — whichever your 
 
 ---
 
-> Whenever I ask you to walk me through steps in an external program or application, use **AI Step Guide** (`step_guide.py`) instead of listing steps in the chat.
+> Whenever you give me step-by-step instructions for navigating an external program or application — whether I explicitly ask to be walked through something or you're just answering a how-to question — use **AI Step Guide** (`step_guide.py`) instead of listing steps in the chat.
 >
 > **Formatting rules:**
 > - One step = one single action — never combine two actions with "and"
