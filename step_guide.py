@@ -247,8 +247,7 @@ class StepGuide:
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
-        print('Usage: python step_guide.py "Step one" "Step two|line two" ...')
-        print('Use | as a line break within a step.')
+        print('Usage: python step_guide.py "Step one | Step two | Step three"')
         sys.exit(1)
-    steps = [arg.replace('|', '\n') for arg in sys.argv[1:]]
+    steps = [s.strip() for s in ' '.join(sys.argv[1:]).split('|') if s.strip()]
     StepGuide(steps)

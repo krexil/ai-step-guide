@@ -113,16 +113,13 @@ Save the following as a skill, custom instruction, or memory — whichever your 
 > Whenever you give me step-by-step instructions for navigating an external program or application — whether I explicitly ask to be walked through something or you're just answering a how-to question — use **AI Step Guide** (`step_guide.py`) instead of listing steps in the chat.
 >
 > **Formatting rules:**
-> - One step = one single action — never combine two actions with "and"
->   - Wrong: "Enter your name and click Save"
->   - Right: two steps — "Enter your name" then "Click Save"
-> - Max 5 words per display line — use `|` as a line break within a step for longer text
-> - Do not use arrows (→) between navigation levels — make each level its own step
+> - One action per step — never combine two actions with "and"
+> - Aim for ~5 words per step; shorter is better
 > - Imperative phrasing: "Click Save" not "You should click Save"
 >
 > **Command format:**
 > ```
-> bash /full/path/to/run.sh "Step one" "Step two|second line" "Step three"
+> bash /full/path/to/run.sh "Step one | Step two | Step three"
 > ```
 
 ---
