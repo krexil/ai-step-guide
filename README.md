@@ -106,35 +106,33 @@ On **macOS**, microphone access is also requested on first run. If it isn't gran
 
 ### 4. Add a persistent trigger
 
-Saving this as a one-time memory is unreliable — memories may not load in every session. The trigger instruction needs to be in a config file (or its equivalent) that loads automatically every session.
+Saving this as a one-time memory is unreliable — memories may not load in every session. The trigger and invocation need to be in config files that load automatically every session.
 
 #### Trigger text
 
-Substitute the actual path to `run.sh` before saving:
+> When giving the user step-by-step instructions for tasks in an external program, use the AI Step Guide tool instead of listing steps as text. This applies whether or not they explicitly asked to be "walked through" something — any how-to answer with numbered or sequential UI steps should use this tool.
 
-> When giving the user step-by-step instructions for tasks in an external program, use the AI Step Guide tool instead of listing steps as text. This applies whether or not they explicitly asked to be "walked through" something — any how-to answer with numbered or sequential UI steps should use this tool. The tool speaks each step aloud and shows it in a large font; the user advances with voice or keyboard.
->
-> **Invocation:** Pass all steps as a single pipe-separated string, 1–5 words per step:
-> ```
-> bash /full/path/to/run.sh "WordPress Admin | Appearance | Menus | Click Create a new menu | Enter a name | Click Create Menu"
-> ```
->
-> | Voice | Keyboard | Action |
-> |-------|----------|--------|
-> | "next" / "continue" | Space or Enter | Advance |
-> | "repeat" / "again" | R | Replay step |
-> | "back" / "previous" | B | Go back one step |
-> | "done" / "quit" / "stop" | Q | Close |
+#### Invocation
+
+On platforms with a skill or command file mechanism, save this as a separate skill file. On others, append it to the trigger text. Substitute the actual path to `run.sh`:
+
+```
+bash /full/path/to/run.sh "WordPress Admin | Appearance | Menus | Click Create a new menu | Enter a name | Click Create Menu"
+```
+
+Aim for 1–5 words per step, pipe-separated.
 
 #### Where to add it
 
-**Claude Code** — append the trigger text to `~/.claude/CLAUDE.md` (global, applies to all projects)
+**Claude Code**
+- Trigger text → append to `~/.claude/CLAUDE.md` (global, applies to all projects)
+- Invocation → save as `~/.claude/commands/step-guide.md` (skill file)
 
-**Claude Cowork** — open the Project → **Project Instructions**, and paste the trigger text
+**Claude Cowork** — open the Project → **Project Instructions**, paste trigger text + invocation
 
-**Cursor** — open **Settings → Rules → User Rules** (global, applies to all projects), and paste the trigger text
+**Cursor** — open **Settings → Rules → User Rules** (global, applies to all projects), paste trigger text + invocation
 
-**Windsurf** — open **Settings → AI → Memories & Rules → Global Rules**, and paste the trigger text
+**Windsurf** — open **Settings → AI → Memories & Rules → Global Rules**, paste trigger text + invocation
 
 ---
 
