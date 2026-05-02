@@ -100,9 +100,7 @@ A window opens on the user's screen and the first step plays aloud. Ask the user
 
 The Vosk speech recognition model (~50 MB) downloads automatically on first run. On **macOS**, microphone access is requested on first run — if not granted automatically, enable it in System Settings → Privacy & Security → Microphone for Terminal.
 
-### 4. Set up the persistent trigger
-
-#### Trigger text
+## 4. Trigger text
 
 > When giving the user step-by-step instructions for tasks in an external program, use the AI Step Guide tool instead of listing steps as text. This applies whether or not they explicitly asked to be "walked through" something — any how-to answer with numbered or sequential UI steps should use this tool.
 
@@ -113,7 +111,7 @@ Save it to:
 - **Cursor** → paste into **Settings → Rules → User Rules**
 - **Windsurf** → paste into **Settings → AI → Memories & Rules → Global Rules**
 
-#### Skill file
+## 5. Skill file
 
 ````markdown
 # Step Guide Skill
