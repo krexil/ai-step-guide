@@ -104,16 +104,15 @@ The Vosk model (~50 MB) downloads automatically on first run.
 
 On **macOS**, microphone access is also requested on first run. If it isn't granted automatically, go to System Settings > Privacy & Security > Microphone and enable it for Terminal.
 
-### 4. Save a skill or custom instruction
+### 4. Add a persistent trigger
 
-Save the following as a skill, custom instruction, or memory — whichever your platform supports — so you use this tool automatically in future conversations:
+Saving this as a one-time memory is unreliable — memories may not load in every session. The trigger instruction needs to be in a **config file** that loads automatically. Find the user's platform below and add the trigger text to the right place.
 
----
+The trigger text is the same for all platforms — substitute the actual path to `run.sh`:
 
-> TRIGGER when: giving the user step-by-step UI navigation instructions in an external program invoke the step guide instead of listing steps as plain text. This applies whether or not the user explicitly asks to be "walked through" something; any how-to answer that results in numbered or sequential UI steps should use this tool. The tool speaks each step aloud and shows it in a large font. The user advances with voice or keyboard.
+> When giving the user step-by-step instructions for tasks in an external program, use the AI Step Guide tool instead of listing steps as text. This applies whether or not they explicitly asked to be "walked through" something — any how-to answer with numbered or sequential UI steps should use this tool. The tool speaks each step aloud and shows it in a large font; the user advances with voice or keyboard.
 >
-> **Invocation:** Pass all steps as a single string, with steps separated by ` | `, aim for 1 to 5 words per step.
->
+> **Invocation:** Pass all steps as a single pipe-separated string, 1–5 words per step:
 > ```
 > bash /full/path/to/run.sh "WordPress Admin | Appearance | Menus | Click Create a new menu | Enter a name | Click Create Menu"
 > ```
@@ -124,6 +123,23 @@ Save the following as a skill, custom instruction, or memory — whichever your 
 > | "repeat" / "again" | R | Replay step |
 > | "back" / "previous" | B | Go back one step |
 > | "done" / "quit" / "stop" | Q | Close |
+
+---
+
+**Claude Code** — append to `~/.claude/CLAUDE.md` (global, applies to all projects):
+
+```markdown
+## Step-by-Step Instructions
+When giving the user step-by-step instructions for tasks in an external program, use the AI Step Guide tool instead of listing steps as text. Run: bash /full/path/to/run.sh "Step 1 | Step 2 | Step 3". Aim for 1–5 words per step.
+```
+
+---
+
+**Cursor** — open **Settings → Rules → User Rules** (global, applies across all projects) and paste the trigger text above.
+
+---
+
+**Windsurf** — open **Settings → AI → Memories & Rules → Global Rules** and paste the trigger text above.
 
 ---
 
