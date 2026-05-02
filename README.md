@@ -96,24 +96,22 @@ Run a quick test from inside the repo folder:
 bash run.sh "This is step one | This is step two"
 ```
 
-A window should appear and you should hear the first step spoken. Press Q to close.
+A window opens on the user's screen and the first step plays aloud. Ask the user to confirm both before continuing; they can press Q to close.
 
 The Vosk speech recognition model (~50 MB) downloads automatically on first run. On **macOS**, microphone access is requested on first run — if not granted automatically, enable it in System Settings → Privacy & Security → Microphone for Terminal.
 
 ### 4. Set up the persistent trigger
 
-Saving this as a one-time memory is unreliable — memories may not load in every session. The trigger needs to live in a config file that loads automatically.
-
-There are two pieces:
-
-- **Trigger text** — a behavioral rule that tells the AI *when* to invoke the tool
-- **Invocation** — the bash command that tells it *how*
-
-Where each piece goes depends on the platform.
-
 #### Trigger text
 
 > When giving the user step-by-step instructions for tasks in an external program, use the AI Step Guide tool instead of listing steps as text. This applies whether or not they explicitly asked to be "walked through" something — any how-to answer with numbered or sequential UI steps should use this tool.
+
+Save it to:
+
+- **Claude Code** → append to `~/.claude/CLAUDE.md`
+- **Claude Cowork** → paste into the Project → **Project Instructions**
+- **Cursor** → paste into **Settings → Rules → User Rules**
+- **Windsurf** → paste into **Settings → AI → Memories & Rules → Global Rules**
 
 #### Invocation
 
@@ -121,15 +119,14 @@ Where each piece goes depends on the platform.
 bash /full/path/to/run.sh "Step 1 | Step 2 | Step 3"
 ```
 
-Substitute the actual path to `run.sh`. Steps are pipe-separated, 1–5 words each.
+Substitute the actual path. Steps are pipe-separated, 1–5 words each.
 
-#### Where to save them
+Save it to:
 
-**Claude Code** has a skill file mechanism, so the two pieces go in different places:
-- Trigger text → append to `~/.claude/CLAUDE.md` (global, applies to all projects)
-- Invocation → save as a skill file at `~/.claude/commands/step-guide.md`
+- **Claude Code** → as a skill file at `~/.claude/commands/step-guide.md` (example below)
+- **Other platforms** → append after the trigger text in the same config location used above
 
-A minimal `step-guide.md` skill file looks like this (with the actual path filled in):
+Minimal `step-guide.md` skill file:
 
 ````markdown
 ---
@@ -142,14 +139,6 @@ Run this command, substituting the user's actual steps. Each step is 1–5 words
 bash /full/path/to/run.sh "Step 1 | Step 2 | Step 3"
 ```
 ````
-
-The other platforms have a single config location, so paste the trigger text and the invocation together into one place:
-
-**Claude Cowork** — open the Project → **Project Instructions**
-
-**Cursor** — open **Settings → Rules → User Rules** (global, applies to all projects)
-
-**Windsurf** — open **Settings → AI → Memories & Rules → Global Rules**
 
 ---
 
