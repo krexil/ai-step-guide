@@ -103,7 +103,11 @@ The Vosk speech recognition model (~50 MB) downloads automatically on first run.
 ## 4. Trigger text
 
 ````markdown
-When giving the user step-by-step instructions for tasks in an external program, use the AI Step Guide tool instead of listing steps as text. This applies whether or not they explicitly asked to be "walked through" something — any how-to answer with numbered or sequential UI steps should use this tool.
+When giving the user step-by-step instructions for tasks in an external
+program, use the AI Step Guide tool instead of listing steps as text.
+This applies whether or not they explicitly asked to be "walked through"
+something — any how-to answer with numbered or sequential UI steps should
+use this tool.
 ````
 
 Save it to:
