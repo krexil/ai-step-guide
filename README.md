@@ -106,9 +106,11 @@ On **macOS**, microphone access is also requested on first run. If it isn't gran
 
 ### 4. Add a persistent trigger
 
-Saving this as a one-time memory is unreliable — memories may not load in every session. The trigger instruction needs to be in a **config file** that loads automatically. Find the user's platform below and add the trigger text to the right place.
+Saving this as a one-time memory is unreliable — memories may not load in every session. The trigger instruction needs to be in a config file (or its equivalent) that loads automatically every session.
 
-The trigger text is the same for all platforms — substitute the actual path to `run.sh`:
+#### Trigger text
+
+Substitute the actual path to `run.sh` before saving:
 
 > When giving the user step-by-step instructions for tasks in an external program, use the AI Step Guide tool instead of listing steps as text. This applies whether or not they explicitly asked to be "walked through" something — any how-to answer with numbered or sequential UI steps should use this tool. The tool speaks each step aloud and shows it in a large font; the user advances with voice or keyboard.
 >
@@ -124,22 +126,15 @@ The trigger text is the same for all platforms — substitute the actual path to
 > | "back" / "previous" | B | Go back one step |
 > | "done" / "quit" / "stop" | Q | Close |
 
----
+#### Where to add it
 
-**Claude Code** — append to `~/.claude/CLAUDE.md` (global, applies to all projects):
+**Claude Code** — append the trigger text to `~/.claude/CLAUDE.md` (global, applies to all projects)
 
-```markdown
-## Step-by-Step Instructions
-When giving the user step-by-step instructions for tasks in an external program, use the AI Step Guide tool instead of listing steps as text. Run: bash /full/path/to/run.sh "Step 1 | Step 2 | Step 3". Aim for 1–5 words per step.
-```
+**Claude Cowork** — open the Project → **Project Instructions**, and paste the trigger text
 
----
+**Cursor** — open **Settings → Rules → User Rules** (global, applies to all projects), and paste the trigger text
 
-**Cursor** — open **Settings → Rules → User Rules** (global, applies across all projects) and paste the trigger text above.
-
----
-
-**Windsurf** — open **Settings → AI → Memories & Rules → Global Rules** and paste the trigger text above.
+**Windsurf** — open **Settings → AI → Memories & Rules → Global Rules**, and paste the trigger text
 
 ---
 
