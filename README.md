@@ -113,32 +113,34 @@ Save it to:
 - **Cursor** → paste into **Settings → Rules → User Rules**
 - **Windsurf** → paste into **Settings → AI → Memories & Rules → Global Rules**
 
-#### Invocation
+#### Skill file
 
-```
-bash /full/path/to/run.sh "Step 1 | Step 2 | Step 3"
+````markdown
+# Step Guide Skill
+
+TRIGGER when: giving the user step-by-step UI navigation instructions in an external program, invoke the step guide instead of listing steps as plain text. This applies whether or not the user explicitly asks to be "walked through" something; any how-to answer that results in numbered or sequential UI steps should use this tool. The tool speaks each step aloud and shows it in a large font. The user advances with voice or keyboard.
+
+## Invocation
+Pass all steps as a single string, with steps separated by ` | `, aim for 1 to 5 words per step. Substitute the actual path to `run.sh`.
+
+Example:
+```bash
+bash /full/path/to/run.sh "WordPress Admin | Appearance | Menus | Click Create a new menu | Enter a name | Click Create Menu"
 ```
 
-Substitute the actual path. Steps are pipe-separated, 1–5 words each.
+## User Controls
+| Voice | Keyboard | Action |
+|-------|----------|--------|
+| "next" / "continue" | Space or Enter | Advance |
+| "repeat" / "again" | R | Replay step |
+| "back" / "previous" | B | Go back one step |
+| "done" / "quit" / "stop" | Q | Close |
+````
 
 Save it to:
 
-- **Claude Code** → as a skill file at `~/.claude/commands/step-guide.md` (example below)
+- **Claude Code** → `~/.claude/commands/step-guide.md`
 - **Other platforms** → append after the trigger text in the same config location used above
-
-Minimal `step-guide.md` skill file:
-
-````markdown
----
-description: Walk the user through a multi-step procedure using AI Step Guide
----
-
-Run this command, substituting the user's actual steps. Each step is 1–5 words, pipe-separated:
-
-```
-bash /full/path/to/run.sh "Step 1 | Step 2 | Step 3"
-```
-````
 
 ---
 
