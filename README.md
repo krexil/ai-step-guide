@@ -6,7 +6,7 @@ When an AI assistant walks you through a multi-step process in another program, 
 
 ---
 
-## Getting Started
+## Quick Setup
 
 Tell your AI assistant:
 
@@ -23,14 +23,6 @@ With this agent you'll likely be asked to open Terminal and paste one command yo
 ---
 
 ## For Humans
-
-### The Problem
-
-When an AI assistant walks you through a multi-step process in another program, you end up constantly switching focus: read a step in the chat window, switch to the app, do the step, switch back to find the next one. It breaks your flow and slows you down.
-
-### The Solution
-
-AI Step Guide displays one step at a time in a large overlay window, speaks it aloud in a natural voice, and listens for your voice command to advance. Your eyes and hands stay on the task.
 
 ### How It Works
 
@@ -69,44 +61,55 @@ After you hear "Test step 1" say "next".
 
 The user has asked you to set up AI Step Guide on their computer. Follow these steps.
 
-### 1. Install dependencies
-
-**Prerequisite:** Python 3.8+ must be installed. If not: Windows — download from [python.org](https://www.python.org/downloads/); macOS — `brew install python` or download from python.org.
-
-```bash
-python3 -m pip install edge-tts pygame pyaudio vosk
-```
-
-If `pyaudio` fails on **Windows**:
-```bash
-python3 -m pip install pipwin && pipwin install pyaudio
-```
-
-If `pyaudio` fails on **macOS**:
-```bash
-/opt/homebrew/bin/brew install portaudio
-python3 -m pip install pyaudio
-```
-
-### 2. Clone the repo
+### 1. Clone the repo
 
 Ask the user where they'd like to keep it with a suggestion, then clone:
 
 ```bash
 git clone https://github.com/krexil/ai-step-guide.git
+cd ai-step-guide
 ```
+
+### 2. Run the setup script
+
+This installs Python dependencies into a virtual environment and creates a `run.sh` launcher.
+
+**Prerequisite:** Python 3.8+ — Windows users download from [python.org](https://www.python.org/downloads/); macOS users `brew install python` or download from python.org.
+
+**macOS / Linux / Git Bash on Windows** (recommended):
+```bash
+bash setup.sh
+```
+
+**Windows cmd / PowerShell:**
+```bash
+setup.bat
+```
+
+Note: `setup.bat` installs dependencies but does **not** create `run.sh`. The persistent trigger in Step 4 expects `run.sh`, so on Windows install [Git for Windows](https://git-scm.com/download/win) (which includes Git Bash) and use `setup.sh` instead.
 
 ### 3. Confirm it works
 
-Setup creates a `run.sh` launcher in the repo folder — use that instead of calling `python step_guide.py` directly. It handles the virtual environment automatically so no activation is needed.
+Run a quick test from inside the repo folder:
 
-The Vosk model (~50 MB) downloads automatically on first run.
+```bash
+bash run.sh "This is step one | This is step two"
+```
 
-On **macOS**, microphone access is also requested on first run. If it isn't granted automatically, go to System Settings > Privacy & Security > Microphone and enable it for Terminal.
+A window should appear and you should hear the first step spoken. Press Q to close.
 
-### 4. Add a persistent trigger
+The Vosk speech recognition model (~50 MB) downloads automatically on first run. On **macOS**, microphone access is requested on first run — if not granted automatically, enable it in System Settings → Privacy & Security → Microphone for Terminal.
 
-Saving this as a one-time memory is unreliable — memories may not load in every session. The trigger and invocation need to be in config files that load automatically every session.
+### 4. Set up the persistent trigger
+
+Saving this as a one-time memory is unreliable — memories may not load in every session. The trigger needs to live in a config file that loads automatically.
+
+There are two pieces:
+
+- **Trigger text** — a behavioral rule that tells the AI *when* to invoke the tool
+- **Invocation** — the bash command that tells it *how*
+
+Where each piece goes depends on the platform.
 
 #### Trigger text
 
@@ -114,25 +117,39 @@ Saving this as a one-time memory is unreliable — memories may not load in ever
 
 #### Invocation
 
-On platforms with a skill or command file mechanism, save this as a separate skill file. On others, append it to the trigger text. Substitute the actual path to `run.sh`:
-
 ```
-bash /full/path/to/run.sh "WordPress Admin | Appearance | Menus | Click Create a new menu | Enter a name | Click Create Menu"
+bash /full/path/to/run.sh "Step 1 | Step 2 | Step 3"
 ```
 
-Aim for 1–5 words per step, pipe-separated.
+Substitute the actual path to `run.sh`. Steps are pipe-separated, 1–5 words each.
 
-#### Where to add it
+#### Where to save them
 
-**Claude Code**
+**Claude Code** has a skill file mechanism, so the two pieces go in different places:
 - Trigger text → append to `~/.claude/CLAUDE.md` (global, applies to all projects)
-- Invocation → save as `~/.claude/commands/step-guide.md` (skill file)
+- Invocation → save as a skill file at `~/.claude/commands/step-guide.md`
 
-**Claude Cowork** — open the Project → **Project Instructions**, paste trigger text + invocation
+A minimal `step-guide.md` skill file looks like this (with the actual path filled in):
 
-**Cursor** — open **Settings → Rules → User Rules** (global, applies to all projects), paste trigger text + invocation
+````markdown
+---
+description: Walk the user through a multi-step procedure using AI Step Guide
+---
 
-**Windsurf** — open **Settings → AI → Memories & Rules → Global Rules**, paste trigger text + invocation
+Run this command, substituting the user's actual steps. Each step is 1–5 words, pipe-separated:
+
+```
+bash /full/path/to/run.sh "Step 1 | Step 2 | Step 3"
+```
+````
+
+The other platforms have a single config location, so paste the trigger text and the invocation together into one place:
+
+**Claude Cowork** — open the Project → **Project Instructions**
+
+**Cursor** — open **Settings → Rules → User Rules** (global, applies to all projects)
+
+**Windsurf** — open **Settings → AI → Memories & Rules → Global Rules**
 
 ---
 
