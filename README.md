@@ -118,14 +118,20 @@ Save it to:
 ````markdown
 # Step Guide Skill
 
-TRIGGER when: giving the user step-by-step UI navigation instructions in an external program, invoke the step guide instead of listing steps as plain text. This applies whether or not the user explicitly asks to be "walked through" something; any how-to answer that results in numbered or sequential UI steps should use this tool. The tool speaks each step aloud and shows it in a large font. The user advances with voice or keyboard.
+TRIGGER when: giving the user step-by-step UI navigation instructions in an
+external program, invoke the step guide instead of listing steps as plain text.
+This applies whether or not the user explicitly asks to be "walked through"
+something; any how-to answer that results in numbered or sequential UI steps
+should use this tool. The tool speaks each step aloud and shows it in a large
+font. The user advances with voice or keyboard.
 
 ## Invocation
-Pass all steps as a single string, with steps separated by ` | `, aim for 1 to 5 words per step. Substitute the actual path to `run.sh`.
+Pass all steps as a single string, with steps separated by ` | `, aim for 1 to
+5 words per step. Substitute the actual path to `run.sh`.
 
 Example:
 ```bash
-bash /full/path/to/run.sh "WordPress Admin | Appearance | Menus | Click Create a new menu | Enter a name | Click Create Menu"
+bash /full/path/to/run.sh "Step 1 | Step 2 | Step 3"
 ```
 
 ## User Controls
