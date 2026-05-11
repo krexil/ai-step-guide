@@ -4,9 +4,11 @@ AI Step Guide — hands-free step reader for use with AI assistants.
 See README.md for setup and usage.
 """
 
+import os
+os.environ.setdefault('PYGAME_HIDE_SUPPORT_PROMPT', '1')
+
 import asyncio
 import json
-import os
 import sys
 import tempfile
 import threading
@@ -31,10 +33,12 @@ def _check_imports():
         sys.exit(1)
 
 
-VOICE = 'en-US-GuyNeural'
+VOICE      = 'en-US-GuyNeural'
 MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'vosk-model-small-en-us')
-GRAMMAR = json.dumps(['next', 'repeat', 'again', 'back', 'previous', 'done', 'quit', 'stop', '[unk]'])
-MODEL_URL = 'https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip'
+STATE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'step_guide_stuck.json')
+GRAMMAR    = json.dumps(['next', 'repeat', 'again', 'back', 'previous',
+                         'stuck', 'done', 'quit', 'stop', '[unk]'])
+MODEL_URL  = 'https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip'
 
 
 def _ensure_model():
@@ -78,6 +82,7 @@ class StepGuide:
         self.current = 0
         self.listening = True
         self._speaking = False
+        self._stuck = False
         self._audio_cache = {}
         self._cache_lock = threading.Lock()
         self._fetch_locks = {}
@@ -107,7 +112,7 @@ class StepGuide:
 
         tk.Label(
             self.root,
-            text='NEXT (Space)  ·  REPEAT (R)  ·  BACK (B)  ·  DONE (Q)',
+            text='NEXT (Space)  ·  BACK (B)  ·  REPEAT (R)  ·  STUCK (S)  ·  DONE (Q)',
             font=('Arial', 10), fg='#444444', bg='black'
         ).pack(pady=(0, 11))
 
@@ -117,6 +122,8 @@ class StepGuide:
         self.root.bind('<R>', lambda e: self.cmd_repeat())
         self.root.bind('<b>', lambda e: self.cmd_back())
         self.root.bind('<B>', lambda e: self.cmd_back())
+        self.root.bind('<s>', lambda e: self.cmd_stuck())
+        self.root.bind('<S>', lambda e: self.cmd_stuck())
         self.root.bind('<q>', lambda e: self.cmd_done())
         self.root.bind('<Q>', lambda e: self.cmd_done())
 
@@ -198,6 +205,58 @@ class StepGuide:
         pygame.mixer.music.stop()
         threading.Thread(target=self._play, args=(self.current,), daemon=True).start()
 
+    def cmd_stuck(self):
+        """Save state, type context into Claude window, then close."""
+        pygame.mixer.music.stop()
+        try:
+            with open(STATE_FILE, 'w', encoding='utf-8') as f:
+                json.dump({
+                    'step_index': self.current,
+                    'step_text':  self.steps[self.current],
+                    'remaining':  self.steps[self.current:],
+                    'all_steps':  self.steps,
+                }, f, indent=2)
+        except Exception:
+            pass
+        msg = (f"Stuck on step {self.current + 1} of {len(self.steps)}: "
+               f'"{self.steps[self.current]}" — what do you see?')
+        self._type_to_claude(msg)
+        self.cmd_done()
+
+    def _type_to_claude(self, text):
+        """Focus the Claude window and paste text via clipboard + Ctrl+V."""
+        try:
+            import ctypes, win32gui, win32con, time as _time
+            # Search for the Claude window by title
+            hwnd = None
+            def cb(h, _):
+                nonlocal hwnd
+                if not win32gui.IsWindowVisible(h):
+                    return
+                t = win32gui.GetWindowText(h)
+                if t and ('claude' in t.lower() or (len(t) > 2 and ord(t[0]) > 127 and t[1] == ' ')):
+                    hwnd = h
+            win32gui.EnumWindows(cb, None)
+            if not hwnd:
+                return
+            self.root.clipboard_clear()
+            self.root.clipboard_append(text)
+            self.root.update()
+            win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
+            win32gui.SetForegroundWindow(hwnd)
+            _time.sleep(0.4)
+            import win32api
+            win32api.keybd_event(0x11, 0, 0, 0)       # Ctrl down
+            win32api.keybd_event(0x56, 0, 0, 0)       # V down
+            _time.sleep(0.05)
+            win32api.keybd_event(0x56, 0, 0x0002, 0)  # V up
+            win32api.keybd_event(0x11, 0, 0x0002, 0)  # Ctrl up
+            _time.sleep(0.15)
+            win32api.keybd_event(0x0D, 0, 0, 0)       # Enter down
+            win32api.keybd_event(0x0D, 0, 0x0002, 0)  # Enter up
+        except Exception as e:
+            print(f"Could not reach Claude window: {e}", flush=True)
+
     def cmd_done(self):
         self.listening = False
         pygame.mixer.music.stop()
@@ -206,7 +265,9 @@ class StepGuide:
     def _dispatch(self, text):
         if self._speaking:
             return
-        if any(w in text for w in ('next',)):
+        if 'stuck' in text:
+            self.root.after(0, self.cmd_stuck)
+        elif any(w in text for w in ('next',)):
             self.root.after(0, self.cmd_next)
         elif any(w in text for w in ('repeat', 'again')):
             self.root.after(0, self.cmd_repeat)
@@ -248,6 +309,8 @@ class StepGuide:
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         print('Usage: python step_guide.py "Step one | Step two | Step three"')
+        print('       python step_guide.py --resume "Revised step | Next step | ..."')
         sys.exit(1)
+
     steps = [s.strip() for s in ' '.join(sys.argv[1:]).split('|') if s.strip()]
     StepGuide(steps)

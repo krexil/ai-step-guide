@@ -39,6 +39,7 @@ With this agent you'll likely be asked to open Terminal and paste one command yo
 | "next" | Space / Enter | Advance to next step |
 | "repeat" / "again" | R | Replay the current step |
 | "back" / "previous" | B | Go back one step |
+| "stuck" | S | Save state and ask AI for help |
 | "done" / "quit" / "stop" | Q | Close |
 
 ### Testing It
@@ -144,6 +145,7 @@ bash /full/path/to/run.sh "Step 1 | Step 2 | Step 3"
 | "next" / "continue" | Space or Enter | Advance |
 | "repeat" / "again" | R | Replay step |
 | "back" / "previous" | B | Go back one step |
+| "stuck" | S | Save state and ask AI for help |
 | "done" / "quit" / "stop" | Q | Close |
 ````
 
